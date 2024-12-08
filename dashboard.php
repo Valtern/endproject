@@ -7,29 +7,19 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="stylemhsHome.css">
-  <style>
-        .navbar-brand img {
-    height: 30px; /* Adjust logo size */
-}
-
-.nav-link {
-    font-weight: bold; /* Make text bold */
-}
-
-.fas.fa-user-circle {
-    color: #007bff; /* Change icon color */
-}
-.tab-content {
-  min-height: 400px; /* Adjust height as needed */
-  width: 200px;
-}
-
-
-
-/* Ensure notification cards maintain consistent width */
-
-    </style>
+  <link rel="stylesheet" href="dashboard.css">
+  <script>
+            document.addEventListener('DOMContentLoaded', function () {
+    const tabs = document.querySelectorAll('.nav-pills .nav-link');
+    
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function () {
+            tabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+});
+        </script>
 </head>
 <body>
 
@@ -122,69 +112,22 @@
         <div class="d-flex">
     <!-- Vertical Nav Tabs -->
     <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-        <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true" style="            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 40px;
-            background-color: #ffc107;
-            margin-bottom: 10px;
-            border-radius: 5px;">
+        <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">
             <i class="fas fa-home"></i> Home
         </button>
-        <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false" style="
-                    display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 40px;
-            background-color: #ffc107;
-            margin-bottom: 10px;
-            border-radius: 5px;">
+        <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">
             <i class="fas fa-user"></i> Profile
         </button>
-        <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false" style="
-                    display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 40px;
-            background-color: #ffc107;
-            margin-bottom: 10px;
-            border-radius: 5px;">
+        <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">
             <i class="fas fa-bell"></i> Notifications
         </button>
-        <button class="nav-link" id="v-pills-report-tab" data-bs-toggle="pill" data-bs-target="#v-pills-report" type="button" role="tab" aria-controls="v-pills-report" aria-selected="false" style="
-                    display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 40px;
-            background-color: #ffc107;
-            margin-bottom: 10px;
-            border-radius: 5px;">
+        <button class="nav-link" id="v-pills-report-tab" data-bs-toggle="pill" data-bs-target="#v-pills-report" type="button" role="tab" aria-controls="v-pills-report" aria-selected="false" >
             <i class="fa fa-flag"></i> Report
         </button>
-        <button class="nav-link" id="v-pills-history-tab" data-bs-toggle="pill" data-bs-target="#v-pills-history" type="button" role="tab" aria-controls="v-pills-history" aria-selected="false" style="
-                    display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 40px;
-            background-color: #ffc107;
-            margin-bottom: 10px;
-            border-radius: 5px;">
+        <button class="nav-link" id="v-pills-history-tab" data-bs-toggle="pill" data-bs-target="#v-pills-history" type="button" role="tab" aria-controls="v-pills-history" aria-selected="false">
             <i class="fa fa-history"></i> History
         </button>
-        <button class="nav-link" id="v-pills-punishment-tab" data-bs-toggle="pill" data-bs-target="#v-pills-punishment" type="button" role="tab" aria-controls="v-pills-punishment" aria-selected="false" style="
-                    display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 40px;
-            background-color: #ffc107;
-            margin-bottom: 10px;
-            border-radius: 5px;">
+        <button class="nav-link" id="v-pills-punishment-tab" data-bs-toggle="pill" data-bs-target="#v-pills-punishment" type="button" role="tab" aria-controls="v-pills-punishment" aria-selected="false">
             <i class="fa fa-exclamation-triangle"></i> Punishment
         </button>
     </div>
@@ -506,9 +449,11 @@
 </div>
 
 </div>
+
         </div>
     </div>
 </div>
+
 
 
 
