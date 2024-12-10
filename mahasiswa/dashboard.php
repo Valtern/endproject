@@ -104,7 +104,7 @@ document.getElementById('profile-photo').addEventListener('change', function(e) 
             </div>
             <div class="modal-body">Are you soure you want to log out ?</div>
             <div class="modal-footer">
-                  <form action="index.php" method="POST">
+                  <form action="../index.php" method="POST">
                      <button type="submit" class="btn btn-danger">Yes</button>
                      <button type="button" class="btn btn-success" data-bs-dismiss="modal">No</button>
                   </form>

@@ -55,45 +55,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <div class="card" style="width: 600px;">
         <img class="card-img-top mx-auto d-block mt-4" src="img/brand1.png" style="width: 44%; height: 30%;" alt="Title" />
         <div class="card-body">
-        <form method="POST" action="">
-    <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input
-            type="email"
-            class="form-control"
-            name="email"
-            id="email"
-            aria-describedby="emailHelpId"
-            placeholder="username or email"
-            required
-        />
-    </div>
-    <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input
-            type="password"
-            class="form-control"
-            name="password"
-            id="password"
-            placeholder="password"
-            required
-        />
-    </div>
-    
-    <?php if (isset($error)): ?>
-        <div class="alert alert-danger"><?php echo $error; ?></div>
-    <?php endif; ?>
-    
-    <div class="form-check mb-3">
-        <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" name="remember"> Remember me
-        </label>
-    </div>
-    <button
-        type="submit"
-        class="btn btn-primary mx-auto d-block"
-        >Masuk</button>
-</form>
+            <div class="mb-3">
+                <label for="" class="form-label">Email</label>
+                <input
+                    type="email"
+                    class="form-control"
+                    name=""
+                    id=""
+                    aria-describedby="emailHelpId"
+                    placeholder="username or email"
+                />
+            </div>
+            <div class="mb-3">
+                <label for="" class="form-label">Password</label>
+                <input
+                    type="password"
+                    class="form-control"
+                    name=""
+                    id=""
+                    placeholder="password"
+                />
+            </div>
+            <a class="text-secondary float-end" href="forgotPass.php">Forgot password ?</a>
+
+            <div class="form-check mb-3">
+                <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input" name="remember"> Remember me
+                </label>
+                
+            </div>
+            <a
+                name=""
+                id=""
+                class="btn btn-primary mx-auto d-block"
+                href="dashboard.php"
+                role="button"
+                >Masuk</a
+            >    
         </div>
       </div>
     </div>

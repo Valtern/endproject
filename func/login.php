@@ -1,66 +1,65 @@
 <?php
 session_start();
-require_once '\laragon\www\endproject\connection.php';
-
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-ob_start();
+require_once 'connection.php';
 
 function loginUser($email, $password) {
     global $conn;
     
-    try {
-        // Check acc_log table for credentials using prepared statement
-        $query = "SELECT * FROM acc_log WHERE email = :email AND password = :password";
-        $stmt = $conn->prepare($query);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':password', $password);
-        $stmt->execute();
+    // Sanitize inputs
+    $email = mysqli_real_escape_string($conn, $email);
+    $password = mysqli_real_escape_string($conn, $password);
+    
+    // Check credentials in acc_log
+    $query = "SELECT * FROM acc_log WHERE email = '$email' AND password = '$password'";
+    $result = mysqli_query($conn, $query);
+    
+    if (mysqli_num_rows($result) > 0) {
+        $user = mysqli_fetch_assoc($result);
+        $_SESSION['email'] = $email;
+        $_SESSION['accLevel'] = $user['accLevel'];
         
-        if ($stmt->rowCount() > 0) {
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
-            $accLevel = $user['accLevel'];
-            
-            // Check user type based on email
-            switch($accLevel) {
-                case 1: $table = "mahasiswa"; break;
-                case 2: $table = "dosen"; break;
-                case 3: $table = "admin"; break;
-                default: return false;
-            }
-            
-            $userQuery = "SELECT * FROM $table WHERE email = :email";
-            $stmt = $conn->prepare($userQuery);
-            $stmt->bindParam(':email', $email);
-            $stmt->execute();
-            
-            if ($stmt->rowCount() > 0) {
-                $userData = $stmt->fetch(PDO::FETCH_ASSOC);
-                
-                $_SESSION['user_id'] = $userData['id'];
-                $_SESSION['email'] = $email;
-                $_SESSION['acc_level'] = $accLevel;
-                $_SESSION['nama_lengkap'] = $userData['nama_lengkap'];
-                
-                return true;
-            }
+        // Get user details based on accLevel
+        switch ($user['accLevel']) {
+            case 1: // Admin
+                $details = mysqli_query($conn, "SELECT * FROM admin WHERE email = '$email'");
+                $redirect = 'admin/dashboard.php';
+                break;
+            case 2: // Dosen
+                $details = mysqli_query($conn, "SELECT * FROM dosen WHERE email = '$email'");
+                $redirect = 'dosen/dashboard.php';
+                break;
+            case 3: // Mahasiswa
+                $details = mysqli_query($conn, "SELECT * FROM mahasiswa WHERE email = '$email'");
+                $redirect = 'mahasiswa/dashboard.php';
+                break;
+            default:
+                return ['status' => 'error', 'message' => 'Invalid account level'];
         }
-        return false;
-    } catch(PDOException $e) {
-        return false;
+        
+        if ($details && mysqli_num_rows($details) > 0) {
+            $userDetails = mysqli_fetch_assoc($details);
+            $_SESSION['user_id'] = $userDetails['id'];
+            $_SESSION['nama_lengkap'] = $userDetails['nama_lengkap'];
+            
+            return ['status' => 'success', 'redirect' => $redirect];
+        }
     }
+    
+    return ['status' => 'error', 'message' => 'Invalid email or password'];
 }
 
-// Add redirect code here
-if (isset($_POST['email']) && isset($_POST['password'])) {
-    if (loginUser($_POST['email'], $_POST['password'])) {
-        header("Location: dashboard.php");
-        ob_end_flush();
+// Handle login request
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
+    
+    $result = loginUser($email, $password);
+    
+    if ($result['status'] === 'success') {
+        header("Location: ../" . $result['redirect']);
         exit();
     } else {
-        $_SESSION['error'] = "Invalid email or password";
-        header("Location: index.php");
-        ob_end_flush();
+        header("Location: ../index.php?error=" . urlencode($result['message']));
         exit();
     }
 }
