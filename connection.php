@@ -1,13 +1,18 @@
 <?php
+// Database connection details
+$servername = "localhost";
+$username = "root";
+$password = "";
+$database = "sitatip";
 
-$host    = "WAPII";
-$connInfo = array("Database" => "STDSYS", "UID" => "", "PWD" => "");
-$conn = sqlsrv_connect($host, $connInfo);
-
-if ($conn) {
-    echo "Koneksi berhasil. <br/>";
-} else {
-    echo "Koneksi gagal";
-    die(print_r(sqlsrv_errors(), true));
+try {
+    // Create connection using PDO
+    $conn = new PDO("mysql:host=$servername;dbname=$database", $username, $password);
+    
+    // Set error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch(PDOException $e) {
+    echo "Connection failed: " . $e->getMessage();
 }
+
 ?>

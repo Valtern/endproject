@@ -57,8 +57,6 @@
                 </label>
                 
             </div>
-
-
             <a
                 name=""
                 id=""
@@ -66,10 +64,7 @@
                 href="dashboard.php"
                 role="button"
                 >Masuk</a
-            >
-            
-            
-            
+            >    
         </div>
       </div>
     </div>
