@@ -7,18 +7,38 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css\dashboard.css">
+  <link rel="stylesheet" href="..\css\home.css">
   <script>
-            document.addEventListener('DOMContentLoaded', function () {
+// Move the event listener setup inside DOMContentLoaded
+document.addEventListener('DOMContentLoaded', function () {
+    // Existing tab functionality
     const tabs = document.querySelectorAll('.nav-pills .nav-link');
-    
     tabs.forEach(tab => {
         tab.addEventListener('click', function () {
             tabs.forEach(t => t.classList.remove('active'));
             this.classList.add('active');
         });
     });
+
+    // Add click handlers to check buttons
+    document.querySelectorAll('.btn-warning').forEach(button => {
+        button.addEventListener('click', showCheckCompensation);
+    });
 });
+
+function showCheckCompensation() {
+    const compensationList = document.querySelector('.compensation');
+    const checkCompensation = document.querySelector('.check-compensation-content');
+    compensationList.classList.add('d-none');
+    checkCompensation.classList.remove('d-none');
+}
+
+function showCompensationList() {
+    const compensationList = document.querySelector('.compensation');
+    const checkCompensation = document.querySelector('.check-compensation-content');
+    compensationList.classList.remove('d-none');
+    checkCompensation.classList.add('d-none');
+}
 function switchToProfile() {
     const profileTab = document.querySelector('#v-pills-profile-tab');
     profileTab.click();
@@ -35,6 +55,27 @@ document.getElementById('profile-photo').addEventListener('change', function(e) 
         reader.readAsDataURL(file);
     }
 });
+// Add this JavaScript
+function showCheckCompensation() {
+  const compensationList = document.querySelector('.compensation');
+  const checkCompensation = document.querySelector('.check-compensation-content');
+  
+  compensationList.classList.add('d-none');
+  checkCompensation.classList.remove('d-none');
+}
+
+function showCompensationList() {
+  const compensationList = document.querySelector('.compensation');
+  const checkCompensation = document.querySelector('.check-compensation-content');
+  
+  compensationList.classList.remove('d-none');
+  checkCompensation.classList.add('d-none');
+}
+
+// Add click handlers to check buttons
+document.querySelectorAll('.btn-warning').forEach(button => {
+  button.addEventListener('click', showCheckCompensation);
+});
         </script>
 </head>
 <body>
@@ -45,7 +86,7 @@ document.getElementById('profile-photo').addEventListener('change', function(e) 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid border-bottom border-2">
         <a class="navbar-brand" href="#">
-            <img src="img/brand1.png" alt="Logo" style="height: 30px;">
+            <img src="../img/brand1.png" alt="Logo" style="height: 30px;">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -102,7 +143,7 @@ document.getElementById('profile-photo').addEventListener('change', function(e) 
                     aria-label="Close"
                 ></button>
             </div>
-            <div class="modal-body">Are you soure you want to log out ?</div>
+            <div class="modal-body">Are you sure you want to log out ?</div>
             <div class="modal-footer">
                   <form action="index.php" method="POST">
                      <button type="submit" class="btn btn-danger">Yes</button>
@@ -122,7 +163,7 @@ document.getElementById('profile-photo').addEventListener('change', function(e) 
 </script>
 
 
-        <h2><span class="badge badge-rounded-top bg-info badge-lg">Mahasiswa</span></h2>
+        <h2><span class="badge badge-rounded-top bg-info badge-lg">Admin</span></h2>
     <div class="row"> 
         <div class="col">
         <div class="d-flex">
@@ -143,72 +184,38 @@ document.getElementById('profile-photo').addEventListener('change', function(e) 
         <button class="nav-link" id="v-pills-report-tab" data-bs-toggle="pill" data-bs-target="#v-pills-report" type="button" role="tab" aria-controls="v-pills-report" aria-selected="false" >
             <i class="fa fa-flag"></i> Report
         </button>
-        <button class="nav-link" id="v-pills-history-tab" data-bs-toggle="pill" data-bs-target="#v-pills-history" type="button" role="tab" aria-controls="v-pills-history" aria-selected="false">
-            <i class="fa fa-history"></i> History
-        </button>
         <button class="nav-link" id="v-pills-punishment-tab" data-bs-toggle="pill" data-bs-target="#v-pills-punishment" type="button" role="tab" aria-controls="v-pills-punishment" aria-selected="false">
             <i class="fa fa-exclamation-triangle"></i> Punishment
+        </button>
+        <button class="nav-link" id="v-pills-compensation-tab" data-bs-toggle="pill" data-bs-target="#v-pills-compensation" type="button" role="tab" aria-controls="v-pills-compensation" aria-selected="false">
+            <i class="fa fa-history"></i> Compensation
         </button>
     </div>
 
     <!-- Tab Content -->
     <div class="tab-content flex-grow-1">
     <div class="tab-pane fade show active p-3 border rounded bg-light" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-    <h4 class="mb-3">Hai, Agus Kopling!</h4>
+    <h4 class="mb-3">Hi, Faiz rizky</h4>
+    <p>Welcome in Si Disiplin</p>
     
-    <!-- Top Stats Cards -->
-    <div class="d-flex gap-3 mb-4">
+    <!-- Stats Cards Container -->
+    <div class="d-flex justify-content-center gap-4 mb-4 p-4" style="background-color: #15295E; border-radius: 10px;">
         <div class="card flex-fill text-center">
             <div class="card-body">
-                <h3 class="mb-0">0</h3>
-                <small>Total Izin</small>
+                <h6 class="text-muted mb-2">Total Laporan Hari Ini</h6>
+                <h3 class="mb-0">10</h3>
             </div>
         </div>
         <div class="card flex-fill text-center">
             <div class="card-body">
-                <h3 class="mb-0">2</h3>
-                <small>Total Laporan</small>
+                <h6 class="text-muted mb-2">Total Laporan Teraprove</h6>
+                <h3 class="mb-0">7</h3>
             </div>
         </div>
         <div class="card flex-fill text-center">
             <div class="card-body">
-                <h3 class="mb-0">4</h3>
-                <small>Total Laporan Ditolak</small>
-            </div>
-        </div>
-        <div class="card flex-fill text-center">
-            <div class="card-body">
+                <h6 class="text-muted mb-2">Total Laporan DiCheck</h6>
                 <h3 class="mb-0">3</h3>
-                <small>Total Sakit</small>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bottom Stats Card -->
-    <div class="card bg-danger text-white">
-        <div class="card-body">
-            <h5 class="card-title mb-4">Data Absensi Alpha, Ijin, dan Sakit Mahasiswa</h5>
-            <div class="d-flex justify-content-between text-center">
-                <div>
-                    <h4 class="mb-0">16</h4>
-                    <small>Total Keterlambatan</small>
-                </div>
-                <div>
-                    <h4 class="mb-0">2</h4>
-                    <small>Alpha</small>
-                </div>
-                <div>
-                    <h4 class="mb-0">8</h4>
-                    <small>Ijin</small>
-                </div>
-                <div>
-                    <h4 class="mb-0">6</h4>
-                    <small>Sakit</small>
-                </div>
-                <div>
-                    <h4 class="mb-0">4</h4>
-                    <small>Total Dispensasi</small>
-                </div>
             </div>
         </div>
     </div>
@@ -405,104 +412,7 @@ document.getElementById('profile-photo').addEventListener('change', function(e) 
         </div>
     </div>
 </div>
-<div class="tab-pane fade p-3 border rounded bg-light" id="v-pills-history" role="tabpanel" aria-labelledby="v-pills-history-tab">
-    <div class="nav nav-tabs mb-4" role="tablist">
-        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#history-diterima" type="button" role="tab">Diterima</button>
-        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#history-diajukan" type="button" role="tab">Diajukan</button>
-    </div>
 
-    <div class="tab-content">
-        <!-- Diterima tab -->
-        <div class="tab-pane fade show active" id="history-diterima" role="tabpanel">
-            <div class="table-responsive">
-                <h5>Laporan yang Diterima</h5>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>No. Pelanggaran</th>
-                            <th>Nama Pelanggaran</th>
-                            <th>Bobot</th>
-                            <th>Status</th>
-                            <th>Detail</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>ABC01</td>
-                            <td>Merokok</td>
-                            <td>IV</td>
-                            <td>Accepted</td>
-                            <td><button class="btn btn-warning btn-sm">Check</button></td>
-                        </tr>
-                <tr>
-                    <td>ABC02</td>
-                    <td>Merusak sarana prasarana</td>
-                    <td>II</td>
-                    <td>Accepted</td>
-                    <td><button class="btn btn-warning btn-sm">Check</button></td>
-                </tr>
-                <tr>
-                    <td>ABC03</td>
-                    <td>Berkelahi</td>
-                    <td></td>
-                    <td>Pending</td>
-                    <td><button class="btn btn-warning btn-sm">Check</button></td>
-                </tr>
-                <tr>
-                    <td>ABC04</td>
-                    <td>Berkata Tidak Sopan</td>
-                    <td></td>
-                    <td>Pending</td>
-                    <td><button class="btn btn-warning btn-sm">Check</button></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-<div class="tab-pane fade" id="history-diajukan" role="tabpanel">
-<div class="card">
-           <div class="card-body">
-             <div class="d-flex mb-3">
-                 <div class="flex-grow-1">
-                     <h6>Bukti</h6>
-                      <img src="path_to_image" class="img-fluid rounded" style="max-width: 200px;" alt="Bukti">
-                  </div>
-              </div>
-
-      <div class="mb-3">
-        <h6>Nama Mahasiswa terlapor</h6>
-        <p class="text-muted">Agus Kopling</p>
-      </div>
-
-      <div class="mb-3">
-        <h6>NIM Mahasiswa terlapor</h6>
-        <p class="text-muted">234171230412</p>
-      </div>
-
-      <div class="mb-3">
-        <h6>Tingkat dan Jenis pelanggaran</h6>
-        <p class="text-muted">IV - Merusak Sarana Prasarana</p>
-      </div>
-
-      <div class="mb-3">
-        <h6>Waktu</h6>
-        <p class="text-muted">Kamis, 14 November 2024 pukul 14:59</p>
-      </div>
-
-      <div class="mb-3">
-        <h6>Lokasi</h6>
-        <p class="text-muted">Di Ruang Kelas</p>
-      </div>
-
-      <div class="d-flex justify-content-end gap-2">
-        <button class="btn btn-secondary">Aju Banding</button>
-        <button class="btn btn-primary">Terima</button>
-      </div>
-    </div>
-  </div>
-</div>
-    </div>
-</div>
 
 <div class="tab-pane fade p-3 border rounded bg-light" id="v-pills-punishment" role="tabpanel" aria-labelledby="v-pills-punishment-tab">
     <div class="table-responsive">
@@ -533,6 +443,92 @@ document.getElementById('profile-photo').addEventListener('change', function(e) 
         </table>
     </div>
 </div>
+<div class="tab-pane fade p-3 border rounded bg-light" id="v-pills-compensation" role="tabpanel" aria-labelledby="v-pills-compensation-tab">
+    <button class="btn btn-primary mb-3">Add new Student</button>
+    
+    <div class="compensation">
+        <h5>Compensation</h5>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>NIM</th>
+                    <th>Kelas</th>
+                    <th>Detail</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Name</td>
+                    <td>NIM</td>
+                    <td>1 i</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm">Check</button>
+                        <button class="btn btn-primary btn-sm">Task</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Name</td>
+                    <td>NIM</td>
+                    <td>2 i</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm">Check</button>
+                        <button class="btn btn-primary btn-sm">Task</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Name</td>
+                    <td>NIM</td>
+                    <td>3 i</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm">Check</button>
+                        <button class="btn btn-primary btn-sm">Task</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Name</td>
+                    <td>NIM</td>
+                    <td>4 i</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm">Check</button>
+                        <button class="btn btn-primary btn-sm">Task</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- Add this new tab content inside the compensation tab panel -->
+<div class="check-compensation-content d-none">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title mb-4">Edit compensation</h5>
+      <form>
+        <div class="mb-3">
+          <label class="form-label">Name of reported student</label>
+          <input type="text" class="form-control bg-light" value="Agus Kopling" readonly>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Task</label>
+          <input type="text" class="form-control bg-light" value="234172304412" readonly>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Location</label>
+          <input type="text" class="form-control bg-light" value="Class Room" readonly>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Time to do</label>
+          <input type="text" class="form-control bg-light" value="Thursday, 14 November 2024 At 14:59" readonly>
+        </div>
+        <div class="text-end">
+          <button type="button" class="btn btn-secondary me-2" onclick="showCompensationList()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+
 
 </div>
 
