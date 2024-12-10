@@ -19,6 +19,22 @@
         });
     });
 });
+function switchToProfile() {
+    const profileTab = document.querySelector('#v-pills-profile-tab');
+    profileTab.click();
+}
+
+// Add event listener for profile photo preview
+document.getElementById('profile-photo').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('preview-photo').src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+    }
+});
         </script>
 </head>
 <body>
@@ -117,6 +133,9 @@
         </button>
         <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">
             <i class="fas fa-user"></i> Profile
+        </button>
+        <button class="nav-link d-none" id="v-pills-edit-profile-tab" data-bs-toggle="pill"  data-bs-target="#v-pills-edit-profile" type="button" role="tab" aria-controls="v-pills-edit-profile" aria-selected="false">
+    Edit Profile
         </button>
         <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">
             <i class="fas fa-bell"></i> Notifications
@@ -242,8 +261,75 @@
             </div>
             
             <div class="text-end">
-                <button class="btn btn-primary">Edit</button>
+                <button class="btn btn-primary" onclick="document.querySelector('#v-pills-edit-profile-tab').click()">Edit</button>
             </div>
+        </div>
+    </div>
+</div>
+<div class="tab-pane fade p-3 border rounded bg-light" id="v-pills-edit-profile" role="tabpanel" aria-labelledby="v-pills-edit-profile-tab">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title mb-4">Edit Profile</h5>
+            <form>
+                <div class="text-center mb-4">
+                    <img id="preview-photo" src="profile-photo.jpg" class="rounded-3 mb-3" style="width: 150px; height: 200px; object-fit: cover;">
+                    <div>
+                        <input type="file" class="form-control" id="profile-photo" accept="image/*">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">NIM</label>
+                    <input type="text" class="form-control" value="234777203412">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Nama Lengkap</label>
+                    <input type="text" class="form-control" value="Agus Kopling">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Jenis Kelamin</label>
+                    <select class="form-select">
+                        <option value="Laki-laki">Laki-laki</option>
+                        <option value="Perempuan">Perempuan</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">No. Handphone</label>
+                    <input type="tel" class="form-control" value="082145678900">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">No. Handphone Orang Tua / Wali</label>
+                    <input type="tel" class="form-control" value="082145678900">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Jurusan</label>
+                    <select class="form-select">
+                        <option value="Teknologi Informasi">Teknologi Informasi</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Prodi</label>
+                    <select class="form-select">
+                        <option value="D-IV Teknik Informatika">D-IV Teknik Informatika</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Kelas</label>
+                    <input type="text" class="form-control" value="2">
+                </div>
+
+                <div class="text-end">
+                    <button type="button" class="btn btn-secondary me-2" onclick="switchToProfile()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
