@@ -1,12 +1,13 @@
 <?php
-$host = "localhost";
-$username = "root"; 
-$password = "";
-$database = "sitatip";
+$serverName = "WAPII";
+$database = "sistatip";
+$username = ""; 
+$password = ""; 
 
-$conn = mysqli_connect($host, $username, $password, $database);
-
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
+try {
+    $koneksi = new PDO("sqlsrv:Server=$serverName;Database=$database", $username, $password);
+    $koneksi->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Koneksi gagal: " . $e->getMessage());
 }
 ?>

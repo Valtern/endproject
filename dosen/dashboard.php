@@ -1,3 +1,21 @@
+<?php
+session_start();
+require_once '../connection.php';
+
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['role'])) {
+    header("Location: ../index.php");
+    exit();
+}
+
+// Verify correct role for this page
+$current_role = basename(dirname($_SERVER['PHP_SELF'])); // Gets 'mahasiswa', 'admin', or 'dosen'
+if ($_SESSION['role'] !== $current_role) {
+    header("Location: ../index.php");
+    exit();
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +25,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="..\css\dashboard.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
   <script>
             document.addEventListener('DOMContentLoaded', function () {
     const tabs = document.querySelectorAll('.nav-pills .nav-link');
