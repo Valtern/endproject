@@ -37,6 +37,37 @@ if ($_SESSION['role'] !== $current_role) {
         });
     });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    fetch('../func/login.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ action: 'fetchProfile' })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Failed to fetch profile data");
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                console.error(data.error);
+            } else {
+                // Populate profile fields
+                document.querySelector('#profile-nim').textContent = data.nim || 'N/A';
+                document.querySelector('#profile-nama-lengkap').textContent = data.nama_lengkap;
+                document.querySelector('#profile-jenis-kelamin').textContent = data.jenis_kelamin;
+                document.querySelector('#profile-no-hp').textContent = data.no_hp;
+                document.querySelector('#profile-no-hp-ortu').textContent = data.no_hp_ortu || 'N/A';
+                document.querySelector('#profile-jurusan').textContent = data.jurusan;
+                document.querySelector('#profile-prodi').textContent = data.prodi;
+                document.querySelector('#profile-profesi').textContent = data.kelas || 'N/A';
+                document.querySelector('#profile-email').textContent = data.email;
+            }
+        })
+        .catch(error => console.error("Error fetching profile:", error));
+});
 function switchToProfile() {
     const profileTab = document.querySelector('#v-pills-profile-tab');
     profileTab.click();
@@ -201,45 +232,38 @@ document.getElementById('profile-photo').addEventListener('change', function(e) 
                 <img src="profile-photo.jpg" class="rounded-3 mb-3" style="width: 150px; height: 200px; object-fit: cover;">
             </div>
             
-            <div class="row mb-3">
-                <div class="col-4">NIM</div>
-                <div class="col-8">234777203412</div>
-            </div>
-            
-            <div class="row mb-3">
-                <div class="col-4">Nama Lengkap</div>
-                <div class="col-8">Agus Kopling</div>
-            </div>
-            
-            <div class="row mb-3">
-                <div class="col-4">Jenis Kelamin</div>
-                <div class="col-8">Laki-laki</div>
-            </div>
-            
-            <div class="row mb-3">
-                <div class="col-4">No. Handphone</div>
-                <div class="col-8">082145678900</div>
-            </div>
-            
-            <div class="row mb-3">
-                <div class="col-4">No. Handphone Orang Tua / Wali</div>
-                <div class="col-8">082145678900</div>
-            </div>
-            
-            <div class="row mb-3">
-                <div class="col-4">Jurusan</div>
-                <div class="col-8">Teknologi Informasi</div>
-            </div>
-            
-            <div class="row mb-3">
-                <div class="col-4">Prodi</div>
-                <div class="col-8">D-IV Teknik Informatika</div>
-            </div>
-            
-            <div class="row mb-3">
-                <div class="col-4">Kelas</div>
-                <div class="col-8">2</div>
-            </div>
+<div class="row mb-3">
+    <div class="col-4">NIM</div>
+    <div class="col-8" id="profile-nim"></div>
+</div>
+<div class="row mb-3">
+    <div class="col-4">Nama Lengkap</div>
+    <div class="col-8" id="profile-nama-lengkap"></div>
+</div>
+<div class="row mb-3">
+    <div class="col-4">Jenis Kelamin</div>
+    <div class="col-8" id="profile-jenis-kelamin"></div>
+</div>
+<div class="row mb-3">
+    <div class="col-4">No. Handphone</div>
+    <div class="col-8" id="profile-no-hp"></div>
+</div>
+<div class="row mb-3">
+    <div class="col-4">No. Handphone Orang Tua / Wali</div>
+    <div class="col-8" id="profile-no-hp-ortu"></div>
+</div>
+<div class="row mb-3">
+    <div class="col-4">Jurusan</div>
+    <div class="col-8" id="profile-jurusan"></div>
+</div>
+<div class="row mb-3">
+    <div class="col-4">Prodi</div>
+    <div class="col-8" id="profile-prodi"></div>
+</div>
+<div class="row mb-3">
+    <div class="col-4">Profesi</div>
+    <div class="col-8" id="profile-profesi"></div>
+</div>
             
             <div class="text-end">
                 <button class="btn btn-primary" onclick="document.querySelector('#v-pills-edit-profile-tab').click()">Edit</button>
