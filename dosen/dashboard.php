@@ -59,15 +59,50 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.querySelector('#profile-nama-lengkap').textContent = data.nama_lengkap;
                 document.querySelector('#profile-jenis-kelamin').textContent = data.jenis_kelamin;
                 document.querySelector('#profile-no-hp').textContent = data.no_hp;
-                document.querySelector('#profile-no-hp-ortu').textContent = data.no_hp_ortu || 'N/A';
                 document.querySelector('#profile-jurusan').textContent = data.jurusan;
                 document.querySelector('#profile-prodi').textContent = data.prodi;
-                document.querySelector('#profile-profesi').textContent = data.kelas || 'N/A';
+                document.querySelector('#profile-profesi').textContent = data.profesi || 'N/A';
                 document.querySelector('#profile-email').textContent = data.email;
             }
         })
         .catch(error => console.error("Error fetching profile:", error));
 });
+document.addEventListener('DOMContentLoaded', function () {
+    fetch('../func/login.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+            action: 'fetchProfile'
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Failed to fetch profile data");
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.error) {
+            console.error(data.error);
+        } else {
+            document.getElementById('edit-nama-lengkap').value = data.nama_lengkap;
+            document.getElementById('edit-jenis-kelamin').value = data.jenis_kelamin;
+            document.getElementById('edit-no-hp').value = data.no_hp;
+            document.getElementById('edit-jurusan').value = data.jurusan;
+            document.getElementById('edit-prodi').value = data.prodi;
+            document.getElementById('edit-profesi').value = data.profesi;
+            document.getElementById('edit-email').value = data.email;
+        }
+    })
+    .catch(error => console.error("Error fetching profile:", error));
+});
+
+function switchToProfile() {
+    document.querySelector('#v-pills-profile-tab').click();
+}
+
 function switchToProfile() {
     const profileTab = document.querySelector('#v-pills-profile-tab');
     profileTab.click();
@@ -100,24 +135,39 @@ document.getElementById('profile-photo').addEventListener('change', function(e) 
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#"></a>
-                </li>
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#"></a>
+        </li>
+    </ul>
+    <div class="d-flex align-items-center">
+        <?php
+        try {
+            $user_id = $_SESSION['user_id'];
+            $query = "SELECT nama_lengkap FROM dosen WHERE id = :user_id";
+            $stmt = $koneksi->prepare($query);
+            $stmt->bindParam(':user_id', $user_id);
+            $stmt->execute();
+            $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($user_data) {
+                echo '<span>' . $user_data['nama_lengkap'] . '</span>';
+            }
+        } catch (PDOException $e) {
+            echo '<span class="text-danger">Error loading user data</span>';
+        }
+        ?>
+        <li class="nav-link dropdown">
+            <a href="#" role="button" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fas fa-user-circle fa-2x"></i>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href="#" type="btn" class="btn btn-danger mx-auto d-flex" data-bs-toggle="modal" data-bs-target="#modalLogoutId">Log out</a></li>
             </ul>
-            <div class="d-flex align-items-center">
-                <span class="me-2">Placeholder</span>
-                <span>Placeholder</span>
-                <li class="nav-link dropdown">
-                <a href="#" role="button" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" class="">
-                    <i class="fas fa-user-circle fa-2x"></i>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="#" type="btn" class="btn btn-danger mx-auto d-flex" data-bs-toggle="modal" data-bs-target="#modalLogoutId">Log out</a></li>
-                </ul>
-                </li>
-            </div>
-        </div>
+        </li>
+    </div>
+</div>
+
     </div>
 </nav>
 
@@ -200,31 +250,61 @@ document.getElementById('profile-photo').addEventListener('change', function(e) 
     <!-- Tab Content -->
     <div class="tab-content flex-grow-1">
     <div class="tab-pane fade show active p-3 border rounded bg-light" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-    <h4 class="mb-3">Hi, Farid rahmatullah!</h4>
-    <p>Welcome in Si Disiplin</p>
+    <?php
+    try {
+        // Fetch user name
+        $user_id = $_SESSION['user_id'];
+        $nameQuery = "SELECT nama_lengkap FROM dosen WHERE id = :user_id";
+        $stmt = $koneksi->prepare($nameQuery);
+        $stmt->bindParam(':user_id', $user_id);
+        $stmt->execute();
+        $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Fetch home details
+        $query = "SELECT 
+            total_laporan,
+            total_laporan_teraprove,
+            total_laporan_dicheck
+        FROM home_det_dosen
+        WHERE fk_dos = :user_id";
+        
+        $stmt = $koneksi->prepare($query);
+        $stmt->bindParam(':user_id', $user_id);
+        $stmt->execute();
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+    ?>
     
+    <h4 class="mb-3">Hi, <?php echo htmlspecialchars($userData['nama_lengkap']); ?></h4>
+    <p>Welcome in Si Disiplin</p>
+
     <!-- Stats Cards Container -->
     <div class="d-flex justify-content-center gap-4 mb-4 p-4" style="background-color: #15295E; border-radius: 10px;">
         <div class="card flex-fill text-center">
             <div class="card-body">
                 <h6 class="text-muted mb-2">Total Laporan Hari Ini</h6>
-                <h3 class="mb-0">10</h3>
+                <h3 class="mb-0"><?php echo $data['total_laporan']; ?></h3>
             </div>
         </div>
         <div class="card flex-fill text-center">
             <div class="card-body">
                 <h6 class="text-muted mb-2">Total Laporan Teraprove</h6>
-                <h3 class="mb-0">7</h3>
+                <h3 class="mb-0"><?php echo $data['total_laporan_teraprove']; ?></h3>
             </div>
         </div>
         <div class="card flex-fill text-center">
             <div class="card-body">
                 <h6 class="text-muted mb-2">Total Laporan DiCheck</h6>
-                <h3 class="mb-0">3</h3>
+                <h3 class="mb-0"><?php echo $data['total_laporan_dicheck']; ?></h3>
             </div>
         </div>
     </div>
+    <?php
+    } catch (PDOException $e) {
+        echo '<div class="alert alert-danger">Error fetching data: ' . $e->getMessage() . '</div>';
+    }
+    ?>
 </div>
+
 <div class="tab-pane fade p-3 border rounded bg-light" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
     <div class="card">
         <div class="card-body">
@@ -249,10 +329,6 @@ document.getElementById('profile-photo').addEventListener('change', function(e) 
     <div class="col-8" id="profile-no-hp"></div>
 </div>
 <div class="row mb-3">
-    <div class="col-4">No. Handphone Orang Tua / Wali</div>
-    <div class="col-8" id="profile-no-hp-ortu"></div>
-</div>
-<div class="row mb-3">
     <div class="col-4">Jurusan</div>
     <div class="col-8" id="profile-jurusan"></div>
 </div>
@@ -275,61 +351,42 @@ document.getElementById('profile-photo').addEventListener('change', function(e) 
     <div class="card">
         <div class="card-body">
             <h5 class="card-title mb-4">Edit Profile</h5>
-            <form>
-                <div class="text-center mb-4">
-                    <img id="preview-photo" src="profile-photo.jpg" class="rounded-3 mb-3" style="width: 150px; height: 200px; object-fit: cover;">
-                    <div>
-                        <input type="file" class="form-control" id="profile-photo" accept="image/*">
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">NIM</label>
-                    <input type="text" class="form-control" value="234777203412">
-                </div>
-
+            <form id="editProfileForm" method="POST" action="../func/update_profile.php">
                 <div class="mb-3">
                     <label class="form-label">Nama Lengkap</label>
-                    <input type="text" class="form-control" value="Agus Kopling">
+                    <input type="text" class="form-control" name="nama_lengkap" id="edit-nama-lengkap" required>
                 </div>
-
                 <div class="mb-3">
                     <label class="form-label">Jenis Kelamin</label>
-                    <select class="form-select">
+                    <select class="form-select" name="jenis_kelamin" id="edit-jenis-kelamin" required>
                         <option value="Laki-laki">Laki-laki</option>
                         <option value="Perempuan">Perempuan</option>
                     </select>
                 </div>
-
                 <div class="mb-3">
                     <label class="form-label">No. Handphone</label>
-                    <input type="tel" class="form-control" value="082145678900">
+                    <input type="tel" class="form-control" name="no_hp" id="edit-no-hp" required>
                 </div>
-
-                <div class="mb-3">
-                    <label class="form-label">No. Handphone Orang Tua / Wali</label>
-                    <input type="tel" class="form-control" value="082145678900">
-                </div>
-
                 <div class="mb-3">
                     <label class="form-label">Jurusan</label>
-                    <select class="form-select">
+                    <select class="form-select" name="jurusan" id="edit-jurusan" required>
                         <option value="Teknologi Informasi">Teknologi Informasi</option>
                     </select>
                 </div>
-
                 <div class="mb-3">
                     <label class="form-label">Prodi</label>
-                    <select class="form-select">
+                    <select class="form-select" name="prodi" id="edit-prodi" required>
                         <option value="D-IV Teknik Informatika">D-IV Teknik Informatika</option>
                     </select>
                 </div>
-
                 <div class="mb-3">
-                    <label class="form-label">Kelas</label>
-                    <input type="text" class="form-control" value="2">
+                    <label class="form-label">Profesi</label>
+                    <input type="text" class="form-control" name="profesi" id="edit-profesi" required>
                 </div>
-
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" name="email" id="edit-email" required>
+                </div>
                 <div class="text-end">
                     <button type="button" class="btn btn-secondary me-2" onclick="switchToProfile()">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save Changes</button>
@@ -338,6 +395,7 @@ document.getElementById('profile-photo').addEventListener('change', function(e) 
         </div>
     </div>
 </div>
+
 <div class="tab-pane fade p-3 border rounded bg-light" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
     <div class="d-flex gap-2 mb-4">
         <button class="btn btn-primary">Semua</button>
