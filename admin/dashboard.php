@@ -105,6 +105,17 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     .catch(error => console.error("Error fetching profile:", error));
 });
+function showAllNotifications() {
+    document.querySelectorAll('.notification-list .card').forEach(card => {
+        card.style.display = 'block';
+    });
+}
+
+function showUnreadNotifications() {
+    // You can add logic here to filter unread notifications
+    // For now, it just shows all notifications
+    showAllNotifications();
+}
 
 function switchToProfile() {
     document.querySelector('#v-pills-profile-tab').click();
@@ -449,36 +460,42 @@ document.querySelectorAll('.btn-warning').forEach(button => {
 
 <div class="tab-pane fade p-3 border rounded bg-light" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
     <div class="d-flex gap-2 mb-4">
-        <button class="btn btn-primary">Semua</button>
-        <button class="btn btn-warning">Belum Dibaca</button>
+        <button class="btn btn-primary" onclick="showAllNotifications()">Semua</button>
+        <button class="btn btn-warning" onclick="showUnreadNotifications()">Belum Dibaca</button>
     </div>
-
+    
     <div class="notification-list">
-        <!-- Pengumuman Kedisiplinan -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <h6 class="card-title">Pengumuman Kedisiplinan</h6>
-                <p class="card-text text-muted">Anda menerima laporan pengumuman berupa masukdi di Gedung Utama (Gedung G) pada hari Minggu 5 November 2024.</p>
-            </div>
-        </div>
-
-        <!-- Pengajuan Banding Diterima -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <h6 class="card-title">Pengajuan Banding Diterima</h6>
-                <p class="card-text text-muted">Pengajuan anda telah diterima pengumuman anda telah diterima. Silakan cek Report History anda melalui menu pelanggaran.</p>
-            </div>
-        </div>
-
-        <!-- Pengajuan Laporan Dikonfirmasi -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <h6 class="card-title">Pengajuan Laporan Dikonfirmasi</h6>
-                <p class="card-text text-muted">Laporan anda mengenai pengumuman tata tertib mahasiswa kini juga merta telah kami terima terhadi silahkan lihat. Terima kasih telah partisipasi di kita dalam menjaga tata tertib kampus.</p>
-            </div>
-        </div>
+        <?php
+        try {
+            $user_id = $_SESSION['user_id'];
+            $query = "SELECT title, content, id FROM mail_notif_admin 
+                     WHERE mail_type = :user_id 
+                     ORDER BY id DESC";
+            
+            $stmt = $koneksi->prepare($query);
+            $stmt->bindParam(':user_id', $user_id);
+            $stmt->execute();
+            
+            while ($notification = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                echo '<div class="card mb-3">
+                        <div class="card-body">
+                            <h6 class="card-title">' . htmlspecialchars($notification['title']) . '</h6>
+                            <p class="card-text text-muted">' . htmlspecialchars($notification['content']) . '</p>
+                        </div>
+                    </div>';
+            }
+            
+            if ($stmt->rowCount() == 0) {
+                echo '<div class="alert alert-info">Tidak ada notifikasi</div>';
+            }
+            
+        } catch (PDOException $e) {
+            echo '<div class="alert alert-danger">Error fetching notifications: ' . $e->getMessage() . '</div>';
+        }
+        ?>
     </div>
 </div>
+
 <div class="tab-pane fade p-3 border rounded bg-light" id="v-pills-report" role="tabpanel" aria-labelledby="v-pills-report-tab">
     <div class="card">
         <div class="card-body">
